@@ -24,19 +24,19 @@ var baseHeight;
 function initInsertions() {
 	var doc;
 
-	if (document.forms[form_name]) {
+	if (document.forms["postform"]) {
 		doc = document;
 	} else {
 		doc = opener.document;
 	}
 
-	var textarea = doc.forms[form_name].elements[text_name];
+	var textarea = doc.forms["postform"].elements["message"];
 
 	if (is_ie && typeof(baseHeight) !== 'number') {
 		textarea.focus();
 		baseHeight = doc.selection.createRange().duplicate().boundingHeight;
 
-		if (!document.forms[form_name]) {
+		if (!document.forms["postform"]) {
 			document.body.focus();
 		}
 	}
@@ -50,8 +50,48 @@ function bbstyle(bbnumber) {
 		bbfontstyle(bbtags[bbnumber], bbtags[bbnumber+1]);
 	} else {
 		insert_text('[*]');
-		document.forms[form_name].elements[text_name].focus();
+		document.forms["postform"].elements["message"].focus();
 	}
+}
+
+$(function() {
+	$('.button-style').click( function() {
+	/*if(window.getSelection()) {
+		textarea = $('[contentEditable=true]');
+		var selLength = (typeof(txtarea.textLength) === 'undefined') ? txtarea.value.length : txtarea.textLength;
+		var selStart = txtarea.selectionStart;
+		var selEnd = txtarea.selectionEnd;
+		var scrollTop = txtarea.scrollTop;
+		
+		var select = window.getSelection();
+		var content = $('[contentEditable=true]').text();
+		$('[contentEditable=true]').append($('[contentEditable=true]').text() + '<b>CC</b>');
+	}*/
+	var mytext = selectHTML(this.value);
+    $('.bold').css({"font-weight":"bold"});
+	$('.italic').css({"font-weight":"italic"});
+	$('.underline').css({"font-weight":"underline"});
+})
+});
+function selectHTML(style){
+	try {
+        if (window.ActiveXObject) {
+            var c = document.selection.createRange();
+            return c.htmlText;
+        }
+    
+        var nNd = document.createElement("span");
+		nNd.setAttribute("class", style);
+        var w = getSelection().getRangeAt(0);
+        w.surroundContents(nNd);
+        return nNd.innerHTML;
+    } catch (e) {
+        if (window.ActiveXObject) {
+            return document.selection.createRange();
+        } else {
+            return getSelection();
+        }
+    }
 }
 
 /**
@@ -60,7 +100,7 @@ function bbstyle(bbnumber) {
 function bbfontstyle(bbopen, bbclose) {
 	theSelection = false;
 
-	var textarea = document.forms[form_name].elements[text_name];
+	var textarea = document.forms["postform"].elements["message"];
 
 	textarea.focus();
 
@@ -113,9 +153,9 @@ function insert_text(text, spaces, popup) {
 	var textarea;
 
 	if (!popup) {
-		textarea = document.forms[form_name].elements[text_name];
+		textarea = document.forms["postform"].elements["message"];
 	} else {
-		textarea = opener.document.forms[form_name].elements[text_name];
+		textarea = opener.document.forms["postform"].elements["message"];
 	}
 
 	if (spaces) {
@@ -153,7 +193,7 @@ function insert_text(text, spaces, popup) {
 */
 function attachInline(index, filename) {
 	insert_text('[attachment=' + index + ']' + filename + '[/attachment]');
-	document.forms[form_name].elements[text_name].focus();
+	document.forms["postform"].elements["message"].focus();
 }
 
 /**
@@ -321,7 +361,9 @@ function mozWrap(txtarea, open, close) {
 
 	txtarea.value = s1 + open + s2 + close + s3;
 	txtarea.selectionStart = selStart + open.length;
+	console.log(selStart + open.length);
 	txtarea.selectionEnd = selEnd + open.length;
+	console.log(selEnd + open.length);
 	txtarea.focus();
 	txtarea.scrollTop = scrollTop;
 
@@ -391,17 +433,17 @@ function getCaretPosition(txtarea) {
 		var doc, textarea;
 
 		// find textarea, make sure browser supports necessary functions
-		if (document.forms[form_name]) {
+		if (document.forms["postform"]) {
 			doc = document;
 		} else {
 			doc = opener.document;
 		}
 
-		if (!doc.forms[form_name]) {
+		if (!doc.forms["postform"]) {
 			return;
 		}
 
-		textarea = doc.forms[form_name].elements[text_name];
+		textarea = doc.forms["postform"].elements["message"];
 
 		phpbb.applyCodeEditor(textarea);
 		if ($('#attach-panel').length) {
