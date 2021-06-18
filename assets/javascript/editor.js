@@ -69,8 +69,8 @@ $(function() {
 	}*/
 	var mytext = selectHTML(this.value);
     $('.bold').css({"font-weight":"bold"});
-	$('.italic').css({"font-weight":"italic"});
-	$('.underline').css({"font-weight":"underline"});
+	$('.italic').css({"font-style":"italic"});
+	$('.underline').css({"text-decoration":"underline"});
 })
 });
 function selectHTML(style){
